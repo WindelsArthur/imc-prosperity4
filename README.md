@@ -6,20 +6,6 @@ This repository contains our algorithmic-trading work for **IMC Prosperity 4** (
 
 ---
 
-## Team
-
-**BelmonteHunters** — five ETH Zurich students.
-
-| Member | Profile |
-|---|---|
-| Arthur Windels | <https://www.linkedin.com/in/arthurwindels/> |
-| Arthur Vianna | <https://www.linkedin.com/in/arthur-vianna-3b83942b0/> |
-| Dmitry Sereda | <https://www.linkedin.com/in/mitya-sereda/> |
-| Nicolaj Thomsen | <https://www.linkedin.com/in/tj213/> |
-| Yanis Fallet | <https://www.linkedin.com/in/yanisfallet/> |
-
----
-
 ## The challenge
 
 Prosperity 4 runs over 16 days split into **5 rounds** (R1 & R2 last 72 h, R3–R5 last 48 h).  Each round introduces new tradable goods on a closed exchange where every team's algorithm trades **independently** against a fixed set of bots — there is no team-vs-team interaction in the algo channel.  At the end of each round teams lock in their final `Trader` class; that class is run for **10 000 ticks** on a held-out trading day, and the resulting PnL feeds the leaderboard.
