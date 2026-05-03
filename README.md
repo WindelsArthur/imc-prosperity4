@@ -10,9 +10,17 @@ This repository contains our algorithmic-trading work for **IMC Prosperity 4** (
 
 Prosperity 4 runs over 16 days split into **5 rounds** (R1 & R2 last 72 h, R3–R5 last 48 h).  Each round introduces new tradable goods on a closed exchange where every team's algorithm trades **independently** against a fixed set of bots — there is no team-vs-team interaction in the algo channel.  At the end of each round teams lock in their final `Trader` class; that class is run for **10 000 ticks** on a held-out trading day, and the resulting PnL feeds the leaderboard.
 
-The technical primitives are deliberately spartan: at every tick the algorithm receives a `TradingState` (level-2 order books, recent trades, current positions, observations), and must return a dict of `Order` objects together with a `traderData` string (≤ 50 000 chars) used to persist state across the stateless Lambda calls.  Position limits are enforced per-product; orders that would breach the aggregate buy/sell limit on a tick are rejected wholesale.
-
 The simulation environment is the official `prosperity4btest` package, run identically against locally-released sample days and (on submission) against the unseen evaluation day.
+
+Each tick of the simulation follows a fixed timeline:
+
+1. We receive the current `TradingState` with the bots' resting quotes (level-2 order book per product) and the trades that occurred since the previous tick.
+2. We decide whether to **take** any of those bot quotes — i.e. cross the spread to buy from a bot ask we judge mispriced, or hit a bot bid we judge mispriced.
+3. We post our own resting quotes (limit buy / sell orders) for this tick.
+4. The bots react: some of them lift or hit our resting quotes, some trade among themselves, and they post new quotes for the next tick.
+5. The next `TradingState` is generated and the loop repeats.
+
+This pipeline is the same for all five rounds.
 
 For the official rules and the full datamodel see <https://imc-prosperity.notion.site/Prosperity-4>.
 
@@ -53,26 +61,39 @@ Each section below links into the corresponding round folder and presents the st
 
 Round 1 introduced two products with position limit 80: **ASH_COATED_OSMIUM** (mean-reverting around ~10 000) and **INTARIAN_PEPPER_ROOT** (drifting upward almost deterministically).  Our EDA notebook is at [`round_1/EDA/data_exploration.ipynb`](round_1/EDA/data_exploration.ipynb).
 
-#### Reverse-engineering the hidden fair value
+#### High-level strategy
 
-Both products behave as if there is a *true* fair price hidden inside the order book — bots quote noisily around it, but cross it as soon as you do.  To recover that fair price empirically we used a small trick: submit an algorithm that simply holds a **fixed position of 1** in the asset, and read the per-tick PnL series that the platform writes to the submission log.  Since PnL = position · Δfair, those logs gave us a near-perfect reconstruction of the hidden fair price tick by tick, which we could then fit offline.
+The skeleton is the same for both products and is the template we reuse in every following round:
+
+1. **Compute a fair price** for the product on each tick.
+2. **Take any bot quote that is mispriced relative to fair** — buy from any bot ask `≤ fair`, sell into any bot bid `≥ fair`.
+3. **Market-make around the best remaining bid / ask** (post a passive bid one tick inside the bid, and a passive ask one tick inside the ask), with the constraint that **our resting quotes never cross our own fair**.
+
+Everything else — premium thresholds, inventory skew, opportunistic wide quotes — are layered modifications of those three steps.
+
+#### Reverse-engineering the fair price
+
+Both products behave as if there is a *true* fair price hidden inside the order book — bots quote noisily around it but cross it as soon as you do.  To recover that fair price empirically we used a small trick: **submit an algorithm that simply holds a fixed position of +1 in the asset, and read the per-tick PnL series that the platform writes to the submission log**.  Since PnL = position · Δfair, those logs give us a near-perfect tick-by-tick reconstruction of the hidden fair, which we could then fit offline.
 
 - **ASH** — the recovered fair price is well approximated by an EMA of the **microprice**, `mp = (bb·av + ba·bv) / (bv + av)`, with smoothing factor `α = 0.215`.  See [`algo_r1.py:23-41`](round_1/Algo/algo_r1.py#L23-L41).
 - **INT** — the recovered fair price is essentially **linear in time**.  We fitted the closed-form expression
   ```
   fair(t) = base + round((t/100) · 102.4) / 1024
   ```
-  where `base` is snapped to the nearest 1 000 from the current quotes.  This formula reproduces the published PnL series almost exactly.  See [`algo_r1.py:107-114`](round_1/Algo/algo_r1.py#L107-L114).  Because INT drifts up monotonically, **just being long was already a positive-expectancy strategy** — much of our daily PnL on this asset comes from a structural long bias built into the asymmetric quoting thresholds.
+  where `base` is snapped to the nearest 1 000 from the current quotes.  This formula reproduces the published PnL series almost exactly.  See [`algo_r1.py:107-114`](round_1/Algo/algo_r1.py#L107-L114).
 
-#### Premium logic (why we still keep it)
+#### Per-product position bias
 
-Around each fair value we maintain a **premium**: instead of crossing the spread the moment another quote ticks past fair, we only trade when the counter-quote is at least `M` cents through fair (`M2 = 8` ticks for buys, `M1 = 12` ticks for sells on INT — note the asymmetry that biases us long).  The same idea applies on ASH via the `floor`/`ceil` rounding of the fair.  Practically this means **the algo does nothing during the very first ticks** when the EMA hasn't converged yet, and it abstains during normal market regimes where edge is too thin.  We kept the premium logic in even though most of the PnL comes from quoting, because it's the only mechanism that protects us against regime changes and lets us **catch big opportunities** (a fast move through fair value) without re-tuning anything.
+The two products have very different price dynamics, so the bias we bake into the quoting differs:
+
+- **INT — premium logic to stay as long as possible.**  Because INT drifts upward almost monotonically, just being long is a positive-expectancy strategy.  We exploit that with **asymmetric premium thresholds** (INT only): we buy as long as the bot ask is `≤ fair + 8`, but only sell when the bot bid is `≥ fair + 12`.  In other words we are willing to buy *above* our estimate of fair, and we refuse to sell unless we get a real markup.  This pushes the position long without us having to predict direction.  As a side effect the premiums also act as a regime-change buffer: while the formula is still warming up at the start of the day, or during sudden moves, the algo simply abstains rather than trading on a stale fair.
+- **ASH — inventory skew to stay close to neutral.**  ASH mean-reverts and the source of edge is symmetric two-sided quoting, so the goal is to **avoid accumulating directional inventory**.  We subtract `INV_SKEW · position` (with `INV_SKEW = 0.10`) from the fair value before each take/quote step, which biases the algo to sell when long and buy when short, pulling the position back toward zero.
 
 #### Wide-quote opportunism on missing-side ticks
 
-Inspecting the level-2 books we noticed that on a small fraction of ticks for **INT**, one side of the book disappears entirely (no bid OR no ask present).  When that happens, an aggressive bot will sometimes lift / hit a quote we leave **up to ~100 ticks away from fair**, which is an enormous mark-to-market profit on a single fill.  The current submission therefore plants a quote at `fair − LIMIT_BOTS` (or `fair + LIMIT_BOTS`) on missing-side ticks via the `if bb is None …` / `if ba is None …` branches in `ash_makes` and `int_makes`.
+Inspecting the level-2 books we noticed that on a small fraction of ticks for **INT**, one side of the book disappears entirely (no bid OR no ask present).  When that happens, an aggressive bot will sometimes lift / hit a quote we leave **up to ~95 ticks away from fair**, which is an enormous mark-to-market profit on a single fill.  The current submission therefore plants a quote at `fair − 95` (or `fair + 95`) on missing-side ticks via the `if bb is None …` / `if ba is None …` branches in `ash_makes` and `int_makes`.
 
-We also tested the inverse hypothesis — proactively **clearing our resting orders close to the fair when book depth was low**, hoping to leave the book one-sided ourselves and thereby *create* the missing-side condition — but in backtests this consistently lost money.  The wide-edge fills only happen when the book is *organically* one-sided; manufacturing it via cancellations only forfeits the closer-to-fair queue position.  We kept only the passive "quote far when nothing else is there" version.
+We also tested the inverse idea: **proactively *taking* the bots' near-fair quotes ourselves to remove one side of the book**, so that we could then post our own wide quote far from fair and hope an aggressive bot would lift it.  Concretely, sweep the bid side clean and post a new bid at `fair − 95`; if a bot fills it we collect ~95 ticks of edge.  But the cost of clearing the book in the first place — paying `(fair − bid_price) · volume` to take all the resting bids — was always larger than the upside of the speculative wide-fill.  In short: wide-edge fills only pay when the book is *organically* one-sided; manufacturing the condition is a losing trade.  We kept only the passive "quote far when nothing else is there" version.
 
 ---
 
