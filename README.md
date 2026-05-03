@@ -12,11 +12,11 @@ This repository contains our algorithmic-trading work for **IMC Prosperity 4** (
 
 | Member | Profile |
 |---|---|
-| Arthur Windels | <https://www.linkedin.com/in/arthurwindels> |
-| Arthur Vianna | — |
-| Dmitry Sereda | — |
-| Nicolaj Thomsen | — |
-| Yanis Fallet | — |
+| Arthur Windels | <https://www.linkedin.com/in/arthurwindels/> |
+| Arthur Vianna | <https://www.linkedin.com/in/arthur-vianna-3b83942b0/> |
+| Dmitry Sereda | <https://www.linkedin.com/in/mitya-sereda/> |
+| Nicolaj Thomsen | <https://www.linkedin.com/in/tj213/> |
+| Yanis Fallet | <https://www.linkedin.com/in/yanisfallet/> |
 
 ---
 
