@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.env
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Backtester / runtime artifacts
+backtests/*.log
+*.parquet
+*_cache/
+.optuna_*_cache/
+
+# Bulk research byproducts (regenerable)
+**/_ablate/
+**/_cache/
+_shared_cache/
+
+# Local Claude / agent state
+.claude/
