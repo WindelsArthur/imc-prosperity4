@@ -135,7 +135,7 @@ We explored this exhaustively — the research version is in [`round_3/Algo/algo
 
 #### What we shipped
 
-After convincing ourselves that IV scalping was not going to deliver, we shipped [`algo_r3.py`](round_3/Algo/algo_r3.py) (renamed from `algo_merge_2`).  The strategy is deliberately simple:
+After convincing ourselves that IV scalping was not going to deliver, we shipped [`algo_r3.py`](round_3/Algo/algo_r3.py).  The strategy is deliberately simple:
 
 - **HYDR & VELV** — same template as Round 1: compute fair → take mispriced bot quotes → market-make inside the spread without crossing fair.  HYDR runs an explicit 3-step pipeline (`profit_takes → inventory_rebalance → penny_make`) where the rebalance step uses an inventory-skewed fair, identical in spirit to R1's ASH.
 - **Vouchers** — only the near-the-money strikes (`VEV_5000`, `_5100`, `_5200`, `_5400`, `_5500`) are quoted with a thin BS-around-smile theoretical price; `VEV_5300` is excluded because the fitted smile under-prices it on our data, and the deep-OTM wings (`4000` / `4500` / `6000` / `6500`) are not traded at all.
