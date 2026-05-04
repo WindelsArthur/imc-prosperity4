@@ -1,75 +1,7 @@
-#ALGO MR 3 SUBMIT
-from typing import List, Dict, Any, Tuple
+from typing import List
 import json
 import math
-from datamodel import Listing, Observation, Order, OrderDepth, ProsperityEncoder, Symbol, Trade, TradingState
-
-class Logger:
-    def __init__(self) -> None:
-        self.logs = ""
-        self.max_log_length = 3750
-
-    def print(self, *objects: Any, sep: str = " ", end: str = "\n") -> None:
-        self.logs += sep.join(map(str, objects)) + end
-
-    def flush(self, state, orders, conversions, trader_data):
-        base_length = len(self.to_json([self.compress_state(state, ""), self.compress_orders(orders), conversions, "", ""]))
-        max_item_length = (self.max_log_length - base_length) // 3
-        print(self.to_json([
-            self.compress_state(state, self.truncate(state.traderData, max_item_length)),
-            self.compress_orders(orders), conversions,
-            self.truncate(trader_data, max_item_length),
-            self.truncate(self.logs, max_item_length),
-        ]))
-        self.logs = ""
-
-    def compress_state(self, state, trader_data):
-        return [state.timestamp, trader_data,
-                self.compress_listings(state.listings),
-                self.compress_order_depths(state.order_depths),
-                self.compress_trades(state.own_trades),
-                self.compress_trades(state.market_trades),
-                state.position,
-                self.compress_observations(state.observations)]
-
-    def compress_listings(self, listings):
-        return [[l.symbol, l.product, l.denomination] for l in listings.values()]
-
-    def compress_order_depths(self, ods):
-        return {s: [o.buy_orders, o.sell_orders] for s, o in ods.items()}
-
-    def compress_trades(self, trades):
-        return [[t.symbol, t.price, t.quantity, t.buyer, t.seller, t.timestamp]
-                for arr in trades.values() for t in arr]
-
-    def compress_observations(self, obs):
-        co = {p: [o.bidPrice, o.askPrice, o.transportFees, o.exportTariff, o.importTariff, o.sugarPrice, o.sunlightIndex]
-              for p, o in obs.conversionObservations.items()}
-        return [obs.plainValueObservations, co]
-
-    def compress_orders(self, orders):
-        return [[o.symbol, o.price, o.quantity] for arr in orders.values() for o in arr]
-
-    def to_json(self, value):
-        return json.dumps(value, cls=ProsperityEncoder, separators=(",", ":"))
-
-    def truncate(self, value, max_length):
-        lo, hi = 0, min(len(value), max_length)
-        out = ""
-        while lo <= hi:
-            mid = (lo + hi) // 2
-            cand = value[:mid]
-            if len(cand) < len(value):
-                cand += "..."
-            if len(json.dumps(cand)) <= max_length:
-                out = cand
-                lo = mid + 1
-            else:
-                hi = mid - 1
-        return out
-
-
-logger = Logger()
+from datamodel import Order, OrderDepth, TradingState
 
 TRAIN_OFFSET = 40000
 LIMIT_BOTS = 95
@@ -93,6 +25,7 @@ MM_ASSETS = {"HYDROGEL_PACK", "VELVETFRUIT_EXTRACT", "VEV_4000"}
 MM_SIZE = 10
 MM_MIN_SPREAD = 3
 MM_POS_GATE = 100
+
 
 def fair_static(sym, od, tick, ema):
     return CONFIG[sym]["fair"]
@@ -156,10 +89,10 @@ class Trader:
         if sell_cap > 0:
             orders.append(Order(sym, 1, -sell_cap))
         return orders
-    
+
     def clean_book_after_takes(self, od: OrderDepth, takes: List[Order]):
         for o in takes:
-            if o.quantity > 0:  
+            if o.quantity > 0:
                 od.sell_orders[o.price] = od.sell_orders.get(o.price, 0) + o.quantity
                 if od.sell_orders[o.price] >= 0:
                     del od.sell_orders[o.price]
@@ -175,11 +108,11 @@ class Trader:
             return []
         bb = max(od.buy_orders) if od.buy_orders else max(0, math.floor(fair - LIMIT_BOTS))
         ba = min(od.sell_orders) if od.sell_orders else math.ceil(fair + LIMIT_BOTS)
-        mb = math.floor(fair-1)
-        ma = math.ceil(fair+1)
+        mb = math.floor(fair - 1)
+        ma = math.ceil(fair + 1)
         if ba - bb < MM_MIN_SPREAD:
             return []
-        
+
         orders: List[Order] = []
         if buy_cap > 0:
             bid = min(bb + 1, mb)
@@ -187,7 +120,6 @@ class Trader:
         if sell_cap > 0:
             ask = max(ba - 1, ma)
             orders.append(Order(sym, ask, -min(MM_SIZE, sell_cap)))
-    
         return orders
 
     def trade(self, sym, state, tick, ema):
@@ -204,17 +136,13 @@ class Trader:
 
         fair = FAIR_FN[sym](sym, od, tick, ema)
         takes = self.takes(sym, od, fair, cfg["buy_t"], cfg["sell_t"], pos, cfg["lim"])
-        
         self.clean_book_after_takes(od, takes)
-        
         bt = sum(o.quantity for o in takes if o.quantity > 0)
         st = sum(-o.quantity for o in takes if o.quantity < 0)
         buy_cap = cfg["lim"] - pos - bt
         sell_cap = cfg["lim"] + pos - st
         makes = self.make(sym, fair, od, buy_cap, sell_cap, pos)
-        
         return takes + makes
-
 
     def run(self, state: TradingState):
         result = {}
@@ -227,6 +155,4 @@ class Trader:
                 result[sym] = orders
         td["tick"] = tick + 1
         td["ema"] = ema
-        trader_data = json.dumps(td)
-        logger.flush(state, result, 0, trader_data)
-        return result, 0, trader_data
+        return result, 0, json.dumps(td)

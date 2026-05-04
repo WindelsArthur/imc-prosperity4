@@ -1,110 +1,7 @@
-from typing import List, Any, Tuple
+from typing import List, Tuple
 import json
 import math
-from datamodel import Listing, Observation, Order, OrderDepth, ProsperityEncoder, Symbol, Trade, TradingState
-
-
-class Logger:
-    def __init__(self) -> None:
-        self.logs = ""
-        self.max_log_length = 3750
-
-    def print(self, *objects: Any, sep: str = " ", end: str = "\n") -> None:
-        self.logs += sep.join(map(str, objects)) + end
-
-    def flush(self, state: TradingState, orders: dict[Symbol, list[Order]], conversions: int, trader_data: str) -> None:
-        base_length = len(
-            self.to_json(
-                [
-                    self.compress_state(state, ""),
-                    self.compress_orders(orders),
-                    conversions,
-                    "",
-                    "",
-                ]
-            )
-        )
-        max_item_length = (self.max_log_length - base_length) // 3
-        print(
-            self.to_json(
-                [
-                    self.compress_state(state, self.truncate(state.traderData, max_item_length)),
-                    self.compress_orders(orders),
-                    conversions,
-                    self.truncate(trader_data, max_item_length),
-                    self.truncate(self.logs, max_item_length),
-                ]
-            )
-        )
-        self.logs = ""
-
-    def compress_state(self, state: TradingState, trader_data: str) -> list[Any]:
-        return [
-            state.timestamp,
-            trader_data,
-            self.compress_listings(state.listings),
-            self.compress_order_depths(state.order_depths),
-            self.compress_trades(state.own_trades),
-            self.compress_trades(state.market_trades),
-            state.position,
-            self.compress_observations(state.observations),
-        ]
-
-    def compress_listings(self, listings: dict[Symbol, Listing]) -> list[list[Any]]:
-        compressed = []
-        for listing in listings.values():
-            compressed.append([listing.symbol, listing.product, listing.denomination])
-        return compressed
-
-    def compress_order_depths(self, order_depths: dict[Symbol, OrderDepth]) -> dict[Symbol, list[Any]]:
-        compressed = {}
-        for symbol, order_depth in order_depths.items():
-            compressed[symbol] = [order_depth.buy_orders, order_depth.sell_orders]
-        return compressed
-
-    def compress_trades(self, trades: dict[Symbol, list[Trade]]) -> list[list[Any]]:
-        compressed = []
-        for arr in trades.values():
-            for trade in arr:
-                compressed.append([trade.symbol, trade.price, trade.quantity, trade.buyer, trade.seller, trade.timestamp])
-        return compressed
-
-    def compress_observations(self, observations: Observation) -> list[Any]:
-        conversion_observations = {}
-        for product, observation in observations.conversionObservations.items():
-            conversion_observations[product] = [
-                observation.bidPrice, observation.askPrice, observation.transportFees,
-                observation.exportTariff, observation.importTariff, observation.sugarPrice, observation.sunlightIndex,
-            ]
-        return [observations.plainValueObservations, conversion_observations]
-
-    def compress_orders(self, orders: dict[Symbol, list[Order]]) -> list[list[Any]]:
-        compressed = []
-        for arr in orders.values():
-            for order in arr:
-                compressed.append([order.symbol, order.price, order.quantity])
-        return compressed
-
-    def to_json(self, value: Any) -> str:
-        return json.dumps(value, cls=ProsperityEncoder, separators=(",", ":"))
-
-    def truncate(self, value: str, max_length: int) -> str:
-        lo, hi = 0, min(len(value), max_length)
-        out = ""
-        while lo <= hi:
-            mid = (lo + hi) // 2
-            candidate = value[:mid]
-            if len(candidate) < len(value):
-                candidate += "..."
-            encoded_candidate = json.dumps(candidate)
-            if len(encoded_candidate) <= max_length:
-                out = candidate
-                lo = mid + 1
-            else:
-                hi = mid - 1
-        return out
-
-logger = Logger()
+from datamodel import Order, OrderDepth, TradingState
 
 LIMIT_BOTS = 90
 
@@ -118,7 +15,7 @@ SMILE_STRIKES = {"VEV_5000": 5000, "VEV_5100": 5100, "VEV_5200": 5200,
 BID_PARAMS = {"a": -0.10885050, "b":  0.02657311, "c": 0.23705958}
 ASK_PARAMS = {"a":  0.12353803, "b": -0.02882945, "c": 0.24392969}
 SMILE_LIMIT = 300
-TTE_START   = 5  # round 3 live: change to 5
+TTE_START   = 5
 
 # HYDR-specific config (3-stage: profit_takes -> inventory_rebalance -> penny_make)
 HYDR_CFG = {
@@ -165,7 +62,7 @@ def bs_call(S, K, T, sigma):
 def smile_iv(p, m): return p["a"] * m * m + p["b"] * m + p["c"]
 
 
-# ── HYDR helpers (from reference algo) ───────────────────────────────────────
+# ── HYDR helpers ─────────────────────────────────────────────────────────────
 
 def profit_takes(sym, bids, asks, fair, cfg, pos, buy_cap, sell_cap):
     orders = []
@@ -241,7 +138,7 @@ def penny_make(sym, bids, asks, sf, cfg, buy_cap, sell_cap):
 
 class Trader:
 
-    # ── HYDR (new logic from reference algo) ────────────────────────────────
+    # ── HYDR ────────────────────────────────────────────────────────────────
 
     def trade_hydr(self, state: TradingState) -> List[Order]:
         od = state.order_depths.get(HYDR)
@@ -264,7 +161,7 @@ class Trader:
 
         return takes + bal + makes
 
-    # ── VELV + VEVs (unchanged) ─────────────────────────────────────────────
+    # ── VELV + VEVs ─────────────────────────────────────────────────────────
 
     def takes(self, sym: str, od: OrderDepth, sf: float, pos: int, limit: int, thresh: float) -> Tuple[List[Order], int]:
         orders: List[Order] = []
@@ -418,7 +315,6 @@ class Trader:
         conversions = 0
         ewmas: dict = json.loads(state.traderData) if state.traderData else {}
 
-        # HYDR via new 3-stage logic
         hydr_orders = self.trade_hydr(state)
         if hydr_orders:
             result[HYDR] = hydr_orders
