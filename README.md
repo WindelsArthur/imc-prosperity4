@@ -49,11 +49,7 @@ Each round folder is self-contained: open it, read the `Algo/` source, the `EDA/
 
 ---
 
-## Round-by-round summary
-
-Each section below links into the corresponding round folder and presents the strategy, the EDA that motivated it, and the final result.  Sections are filled in incrementally as each round is finalised.
-
-### Round 1 — ASH_COATED_OSMIUM & INTARIAN_PEPPER_ROOT
+## Round 1 — ASH_COATED_OSMIUM & INTARIAN_PEPPER_ROOT
 
 > Final PnL: **X XIRECs** · rank **X / X**
 
@@ -97,7 +93,7 @@ We also tested the inverse idea: **proactively *taking* the bots' near-fair quot
 
 ---
 
-### Round 2 — same products, blind-auction for extra market access
+## Round 2 — same products, blind-auction for extra market access
 
 > Final PnL: **X XIRECs** · rank **X / X**
 
@@ -111,7 +107,7 @@ The submitted file [`algo_r2.py`](round_2/Algo/algo_r2.py) is identical to [`alg
 
 ---
 
-### Round 3 — Hydrogel, Velvetfruit, and 10 Velvetfruit-Extract Vouchers
+## Round 3 — Hydrogel, Velvetfruit, and 10 Velvetfruit-Extract Vouchers
 
 > Final PnL: **X XIRECs** · rank **X / X**
 
@@ -144,7 +140,7 @@ The point of the shipped algo was to **harvest the safe delta-1 PnL on HYDR / VE
 
 ---
 
-### Round 4 — same products, counterparty IDs disclosed ("Hello, I'm Mark")
+## Round 4 — same products, counterparty IDs disclosed ("Hello, I'm Mark")
 
 > Final PnL: **X XIRECs** · rank **X / X**
 
@@ -194,7 +190,7 @@ We implemented every one of those Mark-aware tweaks on top of `algo_r4.py` — a
 
 ---
 
-### Round 5 — 50 new products, 10 categories, "Cherry Picking Winners"
+## Round 5 — 50 new products, 10 categories, "Cherry Picking Winners"
 
 > Final PnL: **X XIRECs** · rank **X / X**
 
