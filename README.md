@@ -144,13 +144,53 @@ The point of the shipped algo was to **harvest the safe delta-1 PnL on HYDR / VE
 
 ---
 
-### Round 4 — TBD
+### Round 4 — same products, counterparty IDs disclosed ("Hello, I'm Mark")
 
 > Final PnL: **X XIRECs** · rank **X / X**
 
-*To be filled in.*
+📁 [`round_4/`](round_4/) — submitted file: [`round_4/Algo/algo_r4.py`](round_4/Algo/algo_r4.py)
 
-📁 [`round_4/`](round_4/)
+Round 4 keeps the R3 universe (`HYDROGEL_PACK`, `VELVETFRUIT_EXTRACT`, 10 `VEV_*` vouchers; same position limits 200 / 200 / 300; TTE = 4 days at the start of the evaluation day) but the **Trade Watch** now publishes counterparty IDs: every `Trade` arriving in `state.market_trades` carries the names of the bots on each side (`buyer`, `seller`), instead of `None`.  The bots are seven characters labelled `Mark 01`, `Mark 14`, `Mark 22`, `Mark 38`, `Mark 49`, `Mark 55`, `Mark 67`.
+
+#### What we shipped — simple per-product fixed-fair mean reversion
+
+Once we let go of the option-pricing framing from R3 and looked at the data flat, every product turned out to be a clean **fixed-fair mean reversion** problem.  We computed a stable per-product fair value from the historical 4 days of data, and then *take* any quote that is at least `buy_t` below or `sell_t` above it.  We tuned the fair value and thresholds with a clean per-day cross-validation across the 4 days of historical data — train on three days, test on the fourth, rotate — and kept only configurations that did not over-fit any single day.  The full calibrated configuration is the `CONFIG` dict at the top of [`algo_r4.py`](round_4/Algo/algo_r4.py).  Five fair-value methods are needed:
+
+- **A — static fair**: a constant fair price (`VELV`, `VEV_4000`, `VEV_4500`, `VEV_5000`, `VEV_5100`).
+- **C — linear time trend**: `fair(t) = slope · (TRAIN_OFFSET + t) + intercept`, used on `HYDROGEL_PACK` which drifts.
+- **D — EMA on mid**: `fair ← fair + α · (mid − fair)` with α ∈ [3 × 10⁻⁴, 10⁻³], used on the noisier deep-OTM vouchers (`VEV_5300`, `_5400`, `_5500`).
+- **F — static with asymmetric thresholds**: same as A but `buy_t ≠ sell_t` (`VEV_5200`).
+- **Z — quote dust**: post a bid at price 0 and a tiny ask at price 1 (`VEV_6000`, `VEV_6500` are too quiet to mean-revert; the dust quotes catch rounding-error fills for free).
+
+`HYDROGEL_PACK`, `VELVETFRUIT_EXTRACT` and `VEV_4000` get an additional **passive MM layer** on top of the take logic — bid one tick above and ask one tick below the inside, sized at 10 lots, gated off when `|position| ≥ 100` or the spread is below 3 ticks.
+
+This calibrated MR per product backtests **consistently above 200 k** XIRECs across the 4 days of historical data — an order of magnitude more than the IV-scalping route from R3 (~20 k), without ever using the smile.
+
+#### Counterparty research — the seven Marks
+
+We did spend a serious amount of time profiling the seven bots from the disclosed `buyer` / `seller` fields.  The 3-day fingerprint is extremely stable across days:
+
+| Mark | 3d PnL  | Profile                    | Active products                                 |
+|-----:|--------:|----------------------------|-------------------------------------------------|
+|  14  | +42 206 | Dedicated MM (both sides)  | HYDROGEL, VEV_4000, VELV, ATM vouchers          |
+|  67  | +27 261 | **Informed buy-only**      | VELV                                            |
+|  01  | +10 100 | Passive bidder (buy-heavy) | VELV, OTM vouchers (5300–6500)                  |
+|  55  | −13 204 | Active 2-way taker         | VELV                                            |
+|  49  | −15 346 | Uninformed sell-only       | VELV                                            |
+|  22  | −17 395 | Passive seller             | VELV, OTM vouchers (5300–6500)                  |
+|  38  | −33 622 | **Aggressive uninformed taker** | HYDROGEL, VEV_4000                         |
+
+Three pairings explain almost all the volume:
+
+- **HYDROGEL & VEV_4000 ⇒ Mark 14 ↔ Mark 38** (98.2 % and 99.3 % of volume respectively).  Mark 14 quotes a static ±8 (HYDR) / ±10 (VEV_4000) book, Mark 38 lifts/hits aggressively but is *negatively* informed at all horizons ≤ 10 k ticks — Mark 14 collects spread *and* favourable adverse selection.
+- **OTM vouchers ⇒ Mark 22 → Mark 01** (100 % of `VEV_6000` / `VEV_6500` flow).  Mark 22 sells +0.5 above mid, Mark 01 buys −0.5 below; the mid drifts up so Mark 22 leaks PnL.
+- **VELV** is more complex: Mark 67 is buy-only and **informed** (mid rises +1.9 by +5 k ticks after a Mark 67 print); Mark 49 is sell-only and **uninformed** (mid rises +1.7-2.6 after a Mark 49 print) → both are clean follow / fade signals.
+
+The concrete alphas this suggested were: (A) quote inside Mark 14 by 1 tick on HYDROGEL / VEV_4000 to cut queue when Mark 38 sweeps; (B) lift VELV on every Mark 67 buy print and on every Mark 49 sell print; (C) post bids inside Mark 01 on the OTM vouchers; (D) use Mark 14's net VELV flow as a slow trend filter (corr ≈ +0.19 with the next 50 k mid move); (E) skip 4500 / 5000 / 5100 / 5200 entirely (rounding-error volume).
+
+#### Why none of this shipped
+
+We implemented every one of those Mark-aware tweaks on top of `algo_r4.py` — and **none of them moved the needle on the backtester PnL**, individually or stacked.  The shipped algo already takes the same fills the Mark logic would suggest, just without naming the counterparty: when Mark 38 sweeps Mark 14, our quote is already at the touch and we have already bought / sold; when Mark 67 prints, the VELV mid has already moved enough that our static-fair MR has triggered.  The Mark identities are *real* signals, but they're already absorbed by the simple fair-value framework on the 4 days of data we had to test against.  Rather than ship a more complex algorithm whose extra parameters could overfit, we shipped the simple one and left the counterparty data out.
 
 ---
 
