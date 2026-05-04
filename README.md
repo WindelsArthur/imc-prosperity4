@@ -111,13 +111,36 @@ The submitted file [`algo_r2.py`](round_2/Algo/algo_r2.py) is identical to [`alg
 
 ---
 
-### Round 3 — TBD
+### Round 3 — Hydrogel, Velvetfruit, and 10 Velvetfruit-Extract Vouchers
 
 > Final PnL: **X XIRECs** · rank **X / X**
 
-*To be filled in.*
+📁 [`round_3/`](round_3/) — submitted file: [`round_3/Algo/algo_r3.py`](round_3/Algo/algo_r3.py)
 
-📁 [`round_3/`](round_3/)
+Round 3 launches Phase 2: leaderboard reset, all teams start from zero PnL, and the planet of Solvenar introduces three new products.  Two are familiar **delta-1** assets: `HYDROGEL_PACK` and `VELVETFRUIT_EXTRACT` (position limit 200 each).  The third is a strip of **10 European-style call vouchers** on VELV, with strikes in `{4000, 4500, 5000, 5100, 5200, 5300, 5400, 5500, 6000, 6500}`, position limit 300 each, and a 7-day expiry that started at R1 — so **TTE = 5 days at the start of the R3 evaluation day**.  EDA notebooks at [`round_3/EDA/`](round_3/EDA/).
+
+#### IV scalping: the strategy IMC pointed us at, that we never made work
+
+The IMC moderators and on-board advisors strongly suggested the canonical option-market-maker play: **implied-volatility scalping**.  Sketching it for someone who has not seen it before:
+
+1. From the mid prices of each voucher and of the underlying VEV, invert Black-Scholes to obtain an **implied volatility** σᵢ for every voucher i.
+2. Plot σᵢ against the voucher's **moneyness** `m = log(K / S) / √T`.  Empirically this cloud forms a **smile** (or **skew**): vouchers far away from the at-the-money strike trade at higher IV than the ones near it.  The plot below is our pooled IV-smile across the 3 R3 sample days, fit with a quadratic — see [`round_3/Algo/smile_fit/`](round_3/Algo/smile_fit/).
+   
+   ![Pooled IV smile](round_3/Algo/smile_fit/plots/iv_smile_pooled.png)
+   
+   `σ̂(m) = 0.1204·m² + 0.0279·m + 0.2412` — fairly tame around ATM, much wider in the deep-OTM wings.
+3. Re-price each voucher with `σ̂(m)` to get a **theoretical fair price**.  If the voucher trades above `σ̂` we sell it; if below, we buy.  The bet is that the 10 vouchers revert to the fitted smile, *not* that VEV moves — so we **delta-hedge** the option position with VEV so pure σ-mean-reversion is the only exposure left.
+
+We explored this exhaustively — the research version is in [`round_3/Algo/algo_r3_iv.py`](round_3/Algo/algo_r3_iv.py) (renamed `algo_iv6.py`).  We swept the z-score threshold on (σᵢ − σ̂(m)), the EMA half-life of the residual, the position-sizing curve, the delta-hedge granularity (fully hedged each tick vs. partial hedge on aggregate book Δ), and several smile parameterisations (per-day vs. pooled, with / without `VEV_5300`, log-strike vs. absolute moneyness).  We also tried orthogonal ideas: pure z-score mean-reversion on the IV residual without hedging, straight σ-EMA mean-reversion per voucher, and cross-strike pair trading.  **None of these produced reliable PnL** — backtests hovered near zero with large drawdowns, and configurations that looked good in-sample did not survive the held-out submission day.  The main suspects: the smile drifts day to day in the wings (see [`iv_smile_per_day.png`](round_3/Algo/smile_fit/plots/iv_smile_per_day.png)); the IV residuals are not mean-reverting on a tradeable horizon; and at TTE = 5d the gamma exposure dominates the 1-tick edges we tried to capture.
+
+#### What we shipped
+
+After convincing ourselves that IV scalping was not going to deliver, we shipped [`algo_r3.py`](round_3/Algo/algo_r3.py) (renamed from `algo_merge_2`).  The strategy is deliberately simple:
+
+- **HYDR & VELV** — same template as Round 1: compute fair → take mispriced bot quotes → market-make inside the spread without crossing fair.  HYDR runs an explicit 3-step pipeline (`profit_takes → inventory_rebalance → penny_make`) where the rebalance step uses an inventory-skewed fair, identical in spirit to R1's ASH.
+- **Vouchers** — only the near-the-money strikes (`VEV_5000`, `_5100`, `_5200`, `_5400`, `_5500`) are quoted with a thin BS-around-smile theoretical price; `VEV_5300` is excluded because the fitted smile under-prices it on our data, and the deep-OTM wings (`4000` / `4500` / `6000` / `6500`) are not traded at all.
+
+The point of the shipped algo was to **harvest the safe delta-1 PnL on HYDR / VELV** and not bleed on options.
 
 ---
 
