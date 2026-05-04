@@ -10,8 +10,6 @@ This repository contains our algorithmic-trading work for **IMC Prosperity 4** (
 
 Prosperity 4 runs over 16 days split into **5 rounds** (R1 & R2 last 72 h, R3–R5 last 48 h).  Each round introduces new tradable goods on a closed exchange where every team's algorithm trades **independently** against a fixed set of bots — there is no team-vs-team interaction in the algo channel.  At the end of each round teams lock in their final `Trader` class; that class is run for **10 000 ticks** on a held-out trading day, and the resulting PnL feeds the leaderboard.
 
-The simulation environment is the official `prosperity4btest` package, run identically against locally-released sample days and (on submission) against the unseen evaluation day.
-
 Each tick of the simulation follows a fixed timeline:
 
 1. We receive the current `TradingState` with the bots' resting quotes (level-2 order book per product) and the trades that occurred since the previous tick.
@@ -21,6 +19,8 @@ Each tick of the simulation follows a fixed timeline:
 5. The next `TradingState` is generated and the loop repeats.
 
 This pipeline is the same for all five rounds.
+
+The **official evaluation** happens on the IMC platform: at each round we receive a few days of historical data (typically three) for the products that round introduces, and when we submit a `Trader` class the platform runs it for one full unseen day (10 000 ticks) against the round's bot population — that final-day PnL is what feeds the leaderboard.  Locally, we developed against a third-party backtester we cloned from <https://github.com/nabayansaha/imc-prosperity-4-backtester>, replaying the released sample days; this is **not** the official simulator, just a faithful enough emulator to iterate quickly between submissions.
 
 For the official rules and the full datamodel see <https://imc-prosperity.notion.site/Prosperity-4>.
 
