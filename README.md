@@ -2,7 +2,7 @@
 
 This repository contains our algorithmic-trading work for **IMC Prosperity 4** (April 2026), the global online trading challenge run by IMC.  Only the *algorithmic* side of the competition is documented here — manual-trading submissions are excluded by design.
 
-> **Final result.**  Team **Belmonte** finished round-5 with **X XIRECs** and ranked **X / X** overall (algorithmic).
+> **Final result.**  Team **BelmonteHunters** finished round-5 with **X XIRECs** and ranked **X / X** overall (algorithmic).
 
 ---
 
