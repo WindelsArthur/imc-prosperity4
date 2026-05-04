@@ -1,6 +1,0 @@
-name,days,extra,total_pnl,sharpe,max_dd,calmar
-baseline_worse,"5-2,5-3,5-4",--match-trades worse,733058,10.8013,21786,33.6489
-match_all,"5-2,5-3,5-4",--match-trades all,733058,10.8013,21786,33.6489
-drop_d2,"5-3,5-4",--match-trades worse,497646,8.2773,21786,22.843
-drop_d3,"5-2,5-4",--match-trades worse,462978,41.7278,21786,21.2517
-drop_d4,"5-2,5-3",--match-trades worse,505491,10.3106,19398,26.0589
