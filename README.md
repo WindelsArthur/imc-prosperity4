@@ -97,13 +97,17 @@ We also tested the inverse idea: **proactively *taking* the bots' near-fair quot
 
 ---
 
-### Round 2 — TBD
+### Round 2 — same products, blind-auction for extra market access
 
 > Final PnL: **X XIRECs** · rank **X / X**
 
-*To be filled in.*
+📁 [`round_2/`](round_2/) — submitted file: [`round_2/Algo/algo_r2.py`](round_2/Algo/algo_r2.py)
 
-📁 [`round_2/`](round_2/)
+Round 2 keeps the same two products (`ASH_COATED_OSMIUM`, `INTARIAN_PEPPER_ROOT`, position limit 80 each) but introduces a one-off twist: a **Market Access Fee** auction.  Each team can include a `bid()` method in their `Trader` class returning a one-time fee in XIRECs; the **top 50 % of bids** (i.e. those above the cross-team median) win a **25 % larger order book** for the round — the extra quotes slot perfectly into the existing depth distribution.  The accepted bid is then deducted from R2 PnL; teams in the bottom half pay nothing and trade the unmodified book.  Because bids are revealed only after submissions close, it is effectively a blind auction.
+
+Rounds 1 and 2 jointly serve as a qualifier: a team needs **≥ 200 000 XIRECs** of cumulative algorithmic PnL across the two rounds to advance to rounds 3-5, and the leaderboard is reset for Phase 2 regardless of the surplus we accumulate beyond it.  We had already cleared the threshold in Round 1, so two things were true at submission time: (1) marginal PnL beyond the qualifier had no impact on Phase 2, and (2) any MAF bid we won would directly reduce the comfort cushion we still wanted as a safety margin.  We therefore chose **not to spend further effort on Round 2** — we resubmitted the Round 1 algorithm verbatim, with `bid()` returning **0** (effectively opting out of the auction and trading the unmodified 80 % book).
+
+The submitted file [`algo_r2.py`](round_2/Algo/algo_r2.py) is identical to [`algo_r1.py`](round_1/Algo/algo_r1.py) except for the added `bid()` method.
 
 ---
 
@@ -134,21 +138,6 @@ We also tested the inverse idea: **proactively *taking* the bots' near-fair quot
 *To be filled in.*  Round 5 was the only round where we ran a structured multi-phase research pipeline; it lives under [`round_5/AutoResearch/`](round_5/AutoResearch/).
 
 📁 [`round_5/`](round_5/)
-
----
-
-## Reproducing a round
-
-Each round's `Algo/` directory contains the single `.py` file submitted on the platform.  To replay it locally against the sample days released by IMC:
-
-```bash
-pip install prosperity4btest
-prosperity4btest cli round_X/Algo/<file>.py X-2 X-3 X-4 --no-progress
-```
-
-(Replace `X` by the round number; trading days are `<round>-<day_index>`.)
-
-The `Data/` folder mirrors the raw CSVs that IMC provided each round, so the backtester can be pointed at it offline.
 
 ---
 

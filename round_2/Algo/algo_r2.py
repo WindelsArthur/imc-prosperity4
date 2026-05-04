@@ -21,6 +21,11 @@ M2 = 8    # INT buy premium
 
 class Trader:
 
+    # Round 2 only: Market Access Fee bid. We opt out (top-50% bidders pay
+    # their bid against R2 PnL — we already qualified via R1 so we don't pay).
+    def bid(self) -> int:
+        return 0
+
     # ─── unified take / clean / make / trade ────────────────────────────────
 
     def takes(self, prod: str, od: OrderDepth, fair: float, pos: int,
