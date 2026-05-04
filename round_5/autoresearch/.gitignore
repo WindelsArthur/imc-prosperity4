@@ -1,0 +1,23 @@
+# Backtest log files — too large for GitHub (some >100MB), trivially regenerable
+10_backtesting/results/*.log
+
+# R5 raw data is committed at ROUND_5/Data/; this is a redundant mirror
+10_backtesting/data/
+
+# Parquet cache built lazily by utils/data_loader.py from ROUND_5/Data/*.csv
+data_views/*.parquet
+
+# Sweep tmp dirs / per-run scratch algos
+**/_sweep_*/
+**/_v54_par_*.py
+**/_v54adv_*.py
+**/_v54r*.py
+**/_v54mm_*.py
+**/_v54_check.py
+**/_v54_eval.py
+**/_d4sw_*.py
+**/_dchr_*.py
+**/_hydr*_eval*.py
+**/_t5500*.py
+**/_5500_strats/
+**/_mr2*.py

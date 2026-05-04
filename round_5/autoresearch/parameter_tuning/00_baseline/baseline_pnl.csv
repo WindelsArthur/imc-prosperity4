@@ -1,0 +1,2 @@
+fold_mean_pnl,fold_median_pnl,fold_min_pnl,fold_max_pnl,fold_positive_count,total_3day_pnl,sharpe_3day_mean,max_dd_3day,bootstrap_q05,bootstrap_q50,bootstrap_q95
+362034.4,363578.0,354448,364990,5,1083016,63.081,24692,943837.9,1085215.25,1262434.9249999998

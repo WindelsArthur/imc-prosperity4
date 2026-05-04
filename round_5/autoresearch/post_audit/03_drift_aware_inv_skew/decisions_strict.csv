@@ -1,0 +1,11 @@
+product,chosen_beta,retained_strict,any_passed_strict,best_delta_fold_min,best_delta_mean,best_delta_median,best_target_3d_delta,best_target_fold_min_delta,best_passed_strict,best_beta
+ROBOT_DISHES,0.2,False,False,0,0.0,0.0,0,0,False,0.05
+OXYGEN_SHAKE_CHOCOLATE,0.2,False,False,0,56.399999999965075,94.0,94,0,False,0.1
+MICROCHIP_OVAL,0.2,False,False,2258,-2049.0,-3741.0,-2763,-190,False,0.6
+MICROCHIP_SQUARE,0.2,False,False,0,0.0,0.0,0,0,False,0.05
+UV_VISOR_AMBER,0.2,False,False,0,102.0,170.0,170,0,False,0.05
+SLEEP_POD_POLYESTER,0.2,False,False,1652,86.59999999997672,-898.0,2229,1652,False,0.05
+MICROCHIP_TRIANGLE,0.2,False,False,0,0.0,0.0,0,0,False,0.2
+OXYGEN_SHAKE_EVENING_BREATH,0.2,False,False,4,-881.6000000000349,-1614.0,-1180,430,False,0.6
+PANEL_1X4,0.2,False,False,0,-95.60000000003492,-32.0,-414,0,False,0.6
+GALAXY_SOUNDS_BLACK_HOLES,0.2,False,False,0,25.199999999953434,42.0,42,0,False,0.6

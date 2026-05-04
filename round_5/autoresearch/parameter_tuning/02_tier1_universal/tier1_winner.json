@@ -1,0 +1,11 @@
+{
+  "decision": "revert_to_baseline",
+  "params": {
+    "PAIR_TILT_DIVISOR": 3.0,
+    "PAIR_TILT_CLIP": 7.0,
+    "INV_SKEW_BETA": 0.2,
+    "QUOTE_BASE_SIZE_CAP": 8
+  },
+  "fair_quote_gate": 0.25,
+  "rationale": "no LHS/TPE config passed gates (a)+(b)+(c)+(e) vs locked baseline"
+}

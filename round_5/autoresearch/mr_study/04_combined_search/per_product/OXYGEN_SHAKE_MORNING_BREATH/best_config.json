@@ -1,0 +1,7 @@
+{
+  "mode": "MM",
+  "alpha_skew": 0.0,
+  "beta_inv": 0.2,
+  "max_size": 10,
+  "spread_offset": 1
+}

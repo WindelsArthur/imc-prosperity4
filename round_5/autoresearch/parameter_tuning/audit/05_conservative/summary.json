@@ -1,0 +1,40 @@
+{
+  "n_harmful_dropped": 38,
+  "n_unstable_dropped": 12,
+  "n_harmful_intersect_unstable": 3,
+  "extra_caps": {
+    "PANEL_1X4": 5,
+    "UV_VISOR_YELLOW": 5,
+    "OXYGEN_SHAKE_CHOCOLATE": 4
+  },
+  "tuned_reference": {
+    "fold_median": 465320,
+    "fold_min": 450479,
+    "sharpe_3day": 13.0284,
+    "total_3day": 1436024
+  },
+  "conservative": {
+    "fold_median": 419783,
+    "fold_min": 419783,
+    "sharpe_3day": 21.2302,
+    "total_3day": 1326576,
+    "n_pairs": 119
+  },
+  "ship_rule": {
+    "median_within_30k": [
+      false,
+      419783,
+      435320
+    ],
+    "sharpe_ge_30": [
+      false,
+      21.2302
+    ],
+    "fold_min_ge_tuned": [
+      false,
+      419783,
+      450479
+    ],
+    "PASS": false
+  }
+}

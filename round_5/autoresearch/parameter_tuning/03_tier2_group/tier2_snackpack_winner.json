@@ -1,0 +1,10 @@
+{
+  "decision": "tier2_snackpack_uplift",
+  "params": {
+    "SNACKPACK_SKEW_DIVISOR": 5.0,
+    "SNACKPACK_SKEW_CLIP": 3.0,
+    "SNACKPACK_BIG_SKEW": 3.5
+  },
+  "delta_fold_mean": 41263.59999999998,
+  "delta_fold_median": 46004.0
+}

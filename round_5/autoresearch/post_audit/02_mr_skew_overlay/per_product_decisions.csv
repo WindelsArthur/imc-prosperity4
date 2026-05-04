@@ -1,0 +1,4 @@
+product,phi,best_alpha,individual_delta_fold_min,individual_delta_median,individual_delta_target_3day,retained_in_combined,best_row_passed_gate,best_row_alpha,best_row_fold_min
+OXYGEN_SHAKE_EVENING_BREATH,-0.1149865277360381,0.0,0,0,0,False,False,0.5,446012
+ROBOT_IRONING,-0.1175819266707464,0.0,0,0,0,False,False,0.5,446200
+OXYGEN_SHAKE_CHOCOLATE,-0.0797939424960291,0.0,0,0,0,False,False,0.5,446200

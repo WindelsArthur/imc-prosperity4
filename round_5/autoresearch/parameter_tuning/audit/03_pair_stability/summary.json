@@ -1,0 +1,12 @@
+{
+  "n_total_pairs": 166,
+  "n_added_pairs": 127,
+  "n_beta_shift_gt_30pct": 82,
+  "n_beta_shift_gt_30pct_added": 61,
+  "n_adf_holdout_gt_005": 166,
+  "n_unstable_any": 166,
+  "n_unstable_among_added": 127,
+  "n_highly_unstable": 36,
+  "n_highly_unstable_added": 25,
+  "note": "ADF holdout >0.05 fires on 166/166 pairs \u2014 the bar is too loose for intraday Prosperity series. \u03b2-shift >30% (82 pairs) is the discriminating signal; combined \u03b2>50% OR ADF>0.20 on both days gives the 'highly unstable' set."
+}

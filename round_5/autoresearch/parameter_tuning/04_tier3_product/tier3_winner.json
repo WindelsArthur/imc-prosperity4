@@ -1,0 +1,71 @@
+{
+  "decision": "tier3_caps",
+  "prod_cap": {
+    "SLEEP_POD_LAMB_WOOL": 10,
+    "UV_VISOR_MAGENTA": 4,
+    "PANEL_1X2": 3,
+    "TRANSLATOR_SPACE_GRAY": 4,
+    "ROBOT_MOPPING": 2,
+    "PANEL_4X4": 4,
+    "GALAXY_SOUNDS_SOLAR_FLAMES": 4,
+    "SNACKPACK_RASPBERRY": 10,
+    "SNACKPACK_CHOCOLATE": 10,
+    "PEBBLES_L": 4
+  },
+  "per_product": {
+    "SLEEP_POD_LAMB_WOOL": {
+      "old": 3,
+      "new": 10,
+      "delta_median": 7751.0,
+      "decision": "uplift"
+    },
+    "UV_VISOR_MAGENTA": {
+      "old": 4,
+      "new": 4,
+      "decision": "revert"
+    },
+    "PANEL_1X2": {
+      "old": 3,
+      "new": 3,
+      "decision": "revert"
+    },
+    "TRANSLATOR_SPACE_GRAY": {
+      "old": 4,
+      "new": 4,
+      "decision": "revert"
+    },
+    "ROBOT_MOPPING": {
+      "old": 4,
+      "new": 2,
+      "delta_median": 2910.0,
+      "decision": "uplift"
+    },
+    "PANEL_4X4": {
+      "old": 4,
+      "new": 4,
+      "decision": "revert"
+    },
+    "GALAXY_SOUNDS_SOLAR_FLAMES": {
+      "old": 4,
+      "new": 4,
+      "decision": "revert"
+    },
+    "SNACKPACK_RASPBERRY": {
+      "old": 5,
+      "new": 10,
+      "delta_median": 2324.0,
+      "decision": "uplift"
+    },
+    "SNACKPACK_CHOCOLATE": {
+      "old": 5,
+      "new": 10,
+      "delta_median": 6251.0,
+      "decision": "uplift"
+    },
+    "PEBBLES_L": {
+      "old": 4,
+      "new": 4,
+      "decision": "revert"
+    }
+  }
+}

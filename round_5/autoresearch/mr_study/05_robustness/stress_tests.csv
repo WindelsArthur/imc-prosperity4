@@ -1,0 +1,6 @@
+stress,total_pnl,final_pnl,max_drawdown,sharpe,calmar,notes
+baseline_worse,399636,283223,69390,0.9281,5.7592,locked-in v6
+match_all,402669,283301,69390,0.9395,5.8030,upper bound — <1% delta
+limit_8,0,0,0,,,LIM=10 hardcoded; orders rejected by engine
+day3_isolated,,98000,,,,cumulative-derived (day3-day2 deltas)
+day4_isolated,,93000,,,,cumulative-derived (day4-day3 deltas)

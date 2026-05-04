@@ -1,0 +1,22 @@
+{
+  "n_pairs_tested": 127,
+  "indices_tested": [
+    39,
+    165
+  ],
+  "full_tuned_reference": {
+    "day2_pnl": 520225,
+    "day3_pnl": 465320,
+    "day4_pnl": 450479,
+    "total_3day": 1436024,
+    "fold_min": 450479,
+    "fold_median": 465320,
+    "fold_mean": 473332.8,
+    "sharpe_3day": 13.0284
+  },
+  "n_harmful": 38,
+  "n_helpful_strong": 13,
+  "harmful_total_uplift_if_dropped": 130700,
+  "harmful_min_fold_uplift_if_dropped": 55369,
+  "elapsed_s": 1738.3037581443787
+}

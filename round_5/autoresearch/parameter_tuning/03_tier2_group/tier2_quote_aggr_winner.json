@@ -1,0 +1,7 @@
+{
+  "decision": "tier2_aggr_uplift",
+  "params": {
+    "QUOTE_AGGRESSIVE_SIZE": 1
+  },
+  "delta_fold_mean": 48583.20000000001
+}

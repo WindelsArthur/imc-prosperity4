@@ -1,0 +1,2 @@
+test,status,reason
+latency_plus_1_tick,not_run,upstream prosperity4btest CLI does not expose a latency flag; simulating +1 tick latency would require modifying the algorithm to defer state.position reads. Documented in stress_summary.md section 5.

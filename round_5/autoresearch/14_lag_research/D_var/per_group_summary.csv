@@ -1,0 +1,11 @@
+group,var_p,n_obs,max_out_sig,max_in_sig
+galaxy_sounds,1,10000,0,0
+microchip,1,10000,0,0
+oxygen_shake,1,10000,0,0
+panel,1,10000,1,1
+pebbles,1,10000,0,0
+robot,1,10000,1,1
+sleep_pod,1,10000,0,0
+snackpack,1,10000,0,0
+translator,1,10000,0,0
+uv_visor,1,10000,1,2

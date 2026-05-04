@@ -1,0 +1,4 @@
+name,days,extra,total_pnl,sharpe,max_dd,calmar
+wf_d2,5-2,--match-trades worse,235412,,19398,12.1359
+wf_d3,5-3,--match-trades worse,270079,,15305,17.6465
+wf_d4,5-4,--match-trades worse,227566,,21786,10.4458

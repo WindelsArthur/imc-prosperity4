@@ -1,0 +1,10 @@
+{
+  "day2_pnl": 520225,
+  "day3_pnl": 465320,
+  "day4_pnl": 450479,
+  "total_3day": 1436024,
+  "fold_min": 450479,
+  "fold_median": 465320,
+  "fold_mean": 473332.8,
+  "sharpe_3day": 13.0284
+}

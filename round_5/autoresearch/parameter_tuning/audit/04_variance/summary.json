@@ -1,0 +1,174 @@
+{
+  "baseline_per_day": {
+    "2": 364990,
+    "3": 363578,
+    "4": 354448
+  },
+  "tuned_per_day": {
+    "2": 520225,
+    "3": 465320,
+    "4": 450479
+  },
+  "baseline_total_per_day_std": 4672.429869873799,
+  "tuned_total_per_day_std": 29998.7385327376,
+  "delta_total_per_day_std": 25326.3086628638,
+  "baseline_sharpe": 63.081,
+  "tuned_sharpe": 13.0284,
+  "n_products_with_higher_xday_std": 17,
+  "n_products_with_lower_xday_std": 16,
+  "top10_delta_xday_std_share_of_increase": 0.9087042322946254,
+  "top10_variance_contributors": [
+    {
+      "product": "OXYGEN_SHAKE_CHOCOLATE",
+      "baseline_xday_std": 2154.09104316002,
+      "tuned_xday_std": 9949.045258493677,
+      "delta_xday_std": 7794.954215333657,
+      "tuned_d2": 9410.0,
+      "tuned_d3": 3942.0,
+      "tuned_d4": -13891.0
+    },
+    {
+      "product": "PEBBLES_XL",
+      "baseline_xday_std": 5360.311081354224,
+      "tuned_xday_std": 12905.324026239025,
+      "delta_xday_std": 7545.0129448848,
+      "tuned_d2": 35099.0,
+      "tuned_d3": 19441.0,
+      "tuned_d4": 51052.0
+    },
+    {
+      "product": "UV_VISOR_AMBER",
+      "baseline_xday_std": 5579.093494665797,
+      "tuned_xday_std": 10250.859877211386,
+      "delta_xday_std": 4671.766382545588,
+      "tuned_d2": 20425.0,
+      "tuned_d3": -4156.0,
+      "tuned_d4": 3697.0
+    },
+    {
+      "product": "PANEL_1X4",
+      "baseline_xday_std": 6769.897701508413,
+      "tuned_xday_std": 10703.37187785025,
+      "delta_xday_std": 3933.474176341837,
+      "tuned_d2": 21185.0,
+      "tuned_d3": 9779.0,
+      "tuned_d4": -4962.0
+    },
+    {
+      "product": "OXYGEN_SHAKE_GARLIC",
+      "baseline_xday_std": 2069.7671903434507,
+      "tuned_xday_std": 4486.100484335539,
+      "delta_xday_std": 2416.333293992088,
+      "tuned_d2": 24630.0,
+      "tuned_d3": 13645.0,
+      "tuned_d4": 19383.0
+    },
+    {
+      "product": "OXYGEN_SHAKE_MORNING_BREATH",
+      "baseline_xday_std": 3959.941273414151,
+      "tuned_xday_std": 6239.0374435662925,
+      "delta_xday_std": 2279.0961701521414,
+      "tuned_d2": 13303.0,
+      "tuned_d3": -899.0,
+      "tuned_d4": 11090.0
+    },
+    {
+      "product": "PANEL_1X2",
+      "baseline_xday_std": 253.64147925763245,
+      "tuned_xday_std": 2471.1827577543154,
+      "delta_xday_std": 2217.541278496683,
+      "tuned_d2": 1194.0,
+      "tuned_d3": 494.0,
+      "tuned_d4": -4363.0
+    },
+    {
+      "product": "SLEEP_POD_LAMB_WOOL",
+      "baseline_xday_std": 1314.704106971941,
+      "tuned_xday_std": 2820.3206673473615,
+      "delta_xday_std": 1505.6165603754205,
+      "tuned_d2": 9193.0,
+      "tuned_d3": 14118.0,
+      "tuned_d4": 7460.0
+    },
+    {
+      "product": "GALAXY_SOUNDS_SOLAR_WINDS",
+      "baseline_xday_std": 12746.013267772092,
+      "tuned_xday_std": 14186.144233801595,
+      "delta_xday_std": 1440.1309660295028,
+      "tuned_d2": 1180.0,
+      "tuned_d3": 24157.0,
+      "tuned_d4": 35244.0
+    },
+    {
+      "product": "ROBOT_IRONING",
+      "baseline_xday_std": 6905.381347583605,
+      "tuned_xday_std": 8117.729950888706,
+      "delta_xday_std": 1212.3486033051013,
+      "tuned_d2": 23102.0,
+      "tuned_d3": 14746.0,
+      "tuned_d4": 3298.0
+    }
+  ],
+  "bot10_variance_reducers": [
+    {
+      "product": "PEBBLES_XS",
+      "baseline_xday_std": 9280.445403583219,
+      "tuned_xday_std": 3354.6339094850077,
+      "delta_xday_std": -5925.8114940982105
+    },
+    {
+      "product": "MICROCHIP_SQUARE",
+      "baseline_xday_std": 14127.823210483159,
+      "tuned_xday_std": 10091.058825624901,
+      "delta_xday_std": -4036.7643848582575
+    },
+    {
+      "product": "PEBBLES_M",
+      "baseline_xday_std": 5967.590636094269,
+      "tuned_xday_std": 2590.6587750780473,
+      "delta_xday_std": -3376.931861016222
+    },
+    {
+      "product": "GALAXY_SOUNDS_BLACK_HOLES",
+      "baseline_xday_std": 13188.920299503923,
+      "tuned_xday_std": 10661.580589512358,
+      "delta_xday_std": -2527.3397099915655
+    },
+    {
+      "product": "GALAXY_SOUNDS_DARK_MATTER",
+      "baseline_xday_std": 3486.029546633247,
+      "tuned_xday_std": 1079.5571108355296,
+      "delta_xday_std": -2406.4724357977175
+    },
+    {
+      "product": "SNACKPACK_PISTACHIO",
+      "baseline_xday_std": 4264.221408677347,
+      "tuned_xday_std": 2045.767500638004,
+      "delta_xday_std": -2218.4539080393433
+    },
+    {
+      "product": "SNACKPACK_VANILLA",
+      "baseline_xday_std": 3467.9553053636664,
+      "tuned_xday_std": 1887.848216591813,
+      "delta_xday_std": -1580.1070887718533
+    },
+    {
+      "product": "TRANSLATOR_VOID_BLUE",
+      "baseline_xday_std": 2571.9409445440656,
+      "tuned_xday_std": 1254.942583901307,
+      "delta_xday_std": -1316.9983606427586
+    },
+    {
+      "product": "PANEL_2X4",
+      "baseline_xday_std": 4615.536395937337,
+      "tuned_xday_std": 3653.4620111158492,
+      "delta_xday_std": -962.0743848214879
+    },
+    {
+      "product": "SLEEP_POD_POLYESTER",
+      "baseline_xday_std": 6872.621479464732,
+      "tuned_xday_std": 6409.747646271957,
+      "delta_xday_std": -462.87383319277524
+    }
+  ]
+}

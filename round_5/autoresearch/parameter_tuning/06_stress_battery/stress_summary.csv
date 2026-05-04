@@ -1,0 +1,6 @@
+stress,n_runs,min_fold_median,min_total_3day,min_pnl,q05_fold_median,median_fold_median
+match_mode,2,465320.0,1436024.0,,,
+latency,2,400222.0,1299652.0,,,
+limit,2,114069.0,340514.0,,,
+day_only,3,,,450479.0,,
+perturbation,15,,,,411039.0,465045.0

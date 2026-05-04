@@ -1,0 +1,2 @@
+label,beta_overrides,elapsed_s,F1_pnl,F2_pnl,F3_pnl,F4_pnl,F5_pnl,fold_min,fold_median,fold_mean,total_3day,sharpe_3day,max_dd_3day
+3d_combined,"{""ROBOT_DISHES"": 0.05, ""OXYGEN_SHAKE_CHOCOLATE"": 0.1, ""MICROCHIP_OVAL"": 0.4, ""MICROCHIP_SQUARE"": 0.05, ""UV_VISOR_AMBER"": 0.05, ""SLEEP_POD_POLYESTER"": 0.05, ""OXYGEN_SHAKE_EVENING_BREATH"": 0.05, ""PANEL_1X4"": 0.05, ""GALAXY_SOUNDS_BLACK_HOLES"": 0.6}",21.7,456268,449084,456268,491356,456268,449084,456268,461848.8,1396708,20.5832,24426

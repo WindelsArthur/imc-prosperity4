@@ -42,7 +42,7 @@ imc-prosperity4/
     ├── Data/
     ├── Algo/
     ├── EDA/
-    └── AutoResearch/   ← multi-phase research pipeline used only for R5
+    └── autoresearch/   ← multi-phase research pipeline used only for R5
 ```
 
 Each round folder is self-contained: open it, read the `Algo/` source, the `EDA/` notebooks, and you have the full provenance of that round's submission.
@@ -194,13 +194,88 @@ We implemented every one of those Mark-aware tweaks on top of `algo_r4.py` — a
 
 ---
 
-### Round 5 — TBD
+### Round 5 — 50 new products, 10 categories, "Cherry Picking Winners"
 
 > Final PnL: **X XIRECs** · rank **X / X**
 
-*To be filled in.*  Round 5 was the only round where we ran a structured multi-phase research pipeline; it lives under [`round_5/AutoResearch/`](round_5/AutoResearch/).
+📁 [`round_5/`](round_5/) — submitted file: [`round_5/Algo/algo_r5.py`](round_5/Algo/algo_r5.py)
 
-📁 [`round_5/`](round_5/)
+The final round wipes the slate: all previous-round products are removed, and **50 new ones** appear, evenly distributed across 10 categories of 5 (`PEBBLES`, `SNACKPACK`, `MICROCHIP`, `SLEEP_POD`, `ROBOT`, `GALAXY_SOUNDS`, `OXYGEN_SHAKE`, `PANEL`, `TRANSLATOR`, `UV_VISOR`).  The position limit is now a uniform **10 per product**.  We have three days of historical data and the submitted algorithm runs on a fourth, unseen day.
+
+The full list of products is in [`round_5/Algo/algo_r5.py:9-31`](round_5/Algo/algo_r5.py#L9-L31).
+
+#### Strategy framing
+
+With 50 products and a tiny position limit, single-asset MM edges are too thin to pay; the productive question becomes *what cross-product structure exists between these 50 names*?  We hypothesised — and ultimately confirmed — that the round is built around **pair trading and basket invariants**, with the 10 categories of 5 designed as containers for both within-group and cross-group relationships.
+
+#### autoresearch — Claude-Code research pipeline
+
+To explore the universe systematically rather than ad-hoc, we built a multi-phase research scaffold inspired by <https://github.com/karpathy/autoresearch>, driven by [Claude Code](https://www.anthropic.com/claude-code).  Each numbered phase outputs CSVs / markdown into its own folder so the chain stays auditable; downstream phases consume upstream evidence.  The full pipeline (and what we tried in each phase) lives at [`round_5/autoresearch/`](round_5/autoresearch/) — see its [README](round_5/autoresearch/README.md):
+
+| Phase | What we explored |
+|---|---|
+| `00_data_inventory/` | File listings, schema, sanity asserts on the raw CSVs |
+| `01_eda/` | Per-product / per-group / global descriptive stats, distributions |
+| `02_microstructure/` | Order-book depth, spread, queue dynamics, tick autocorrelation |
+| `03_trade_flow/` | Aggressor inference (Lee-Ready), trade imbalance |
+| `04_statistical_patterns/` | Stationarity (ADF, KPSS), regimes, vol clustering, distribution checks |
+| `05_cross_product/` | Within-group pairwise cointegration, lead-lag, basket residuals |
+| `06_global_cross_group/` | Across-group relationships, currency-basket-style invariants |
+| `07_hidden_patterns/` | Calendar / intraday seasonality, lattice / discrete-level products, sine fits |
+| `08_signals/` | Distilled signals: feature → expected edge → IC, half-life |
+| `09_strategy_design/` | Per-product strategy notes |
+| `10_backtesting/` | Walk-forward sweeps via the upstream `prosperity4btest` CLI *(logs excluded from repo — regenerable)* |
+| `11_findings/` | Headline write-ups: [`findings.md`](round_5/autoresearch/11_findings/findings.md), [`per_group_findings.md`](round_5/autoresearch/11_findings/per_group_findings.md), [`exploitable_patterns.md`](round_5/autoresearch/11_findings/exploitable_patterns.md) |
+| `12_final_strategy/` | First-pass strategy + [PnL estimates](round_5/autoresearch/12_final_strategy/pnl_estimates.md) |
+| `13_round2_research/` | Round-2 follow-ups: VECM/Johansen, lead-lag, sine overlays, basket-weight optimisation |
+| `14_lag_research/` | Lagged cointegration sweep, AR-extended models, Granger / VAR, lagged OFI |
+| `mr_study/` | Mean-reversion-only ablation (pure per-product MR baseline, no cross-product structure) |
+| `parameter_tuning/` | Per-phase parameter ablations (caps, divisors, clips, premiums) |
+| `post_audit/` | Post-submission audit: ROBOT_DISHES dedicated handler, MR skew overlay, drift-aware inv-skew, stress tests |
+| `batch1_summary/` | Reconciled deliverables: distilled params + pnl breakdowns |
+
+#### Key findings
+
+The headline patterns the pipeline surfaced (full ranking in [`11_findings/findings.md`](round_5/autoresearch/11_findings/findings.md)):
+
+1. **`PEBBLES` sum-to-50 000 invariant** — `Σ_i mid_i ∈ [49 981, 50 016]` over 30 000 ticks, std 2.8, OU half-life **0.16 ticks**.  Captured as a basket residual skew on each pebble's quote (`-resid / divisor`).
+2. **`SNACKPACK` sum ≈ 50 221** — same idea, ~10× noisier (std 190); used as a smaller skew.
+3. **9 within-group cointegrating pairs** with walk-forward OOS Sharpe ≥ 1: `MICROCHIP_RECTANGLE/SQUARE`, `ROBOT_LAUNDRY/VACUUMING`, `SLEEP_POD_COTTON/POLYESTER`, `GALAXY_DARK_MATTER/PLANETARY_RINGS`, `SNACKPACK_RASPBERRY/VANILLA`, `SNACKPACK_CHOCOLATE/STRAWBERRY`, `UV_VISOR_AMBER/MAGENTA`, `TRANSLATOR_ECLIPSE_CHARCOAL/VOID_BLUE`, `SLEEP_POD_POLYESTER/SUEDE`.
+4. **30 cross-group cointegrating pairs** from a Phase-14 lagged-EG sweep (e.g. `PEBBLES_XL ↔ PANEL_2X4`, `UV_VISOR_AMBER ↔ SNACKPACK_STRAWBERRY`, `OXYGEN_SHAKE_GARLIC ↔ PEBBLES_S`).
+5. **Lattice / quasi-deterministic products** — `OXYGEN_SHAKE_EVENING_BREATH` has only 453 distinct mids over 30 000 ticks, `ROBOT_IRONING` only 631; AR(1) coefficients are strongly negative (≈ −0.13).
+6. **`ROBOT_DISHES`** — strongest AR coefficient in the universe (AR(1) = −0.27, BIC selects p = 9), but day-of-day distributions break (KS p ≈ 0).  Treated with a *dedicated handler* that adds a log-pair tilt from 4 novel residuals on top of the global MM.
+7. **Per-product cap calibration** — 10 products bleed under the global passive-MM at the full ±10 limit; tighter caps (`PROD_CAP` in the algo) recover ~134K cumulatively in ablation.
+
+What was tested **and rejected** is documented in [`batch1_summary/09_findings_master/what_was_dropped.md`](round_5/autoresearch/batch1_summary/09_findings_master/what_was_dropped.md): sine overlays (in-sample R² ≥ 0.96 but no walk-forward edge), Johansen rank-≥ 2, multi-level OFI, lagged OFI, AR-BIC p > 1, VAR / Granger within-group, intraday seasonality, lead-lag PANEL pairs (dominated by simpler within-group cointegration), and others — 20 distinct candidates examined and dropped.
+
+#### Anti-overfitting
+
+Every signal that made it into the algo had to clear three independent filters before being shipped:
+
+1. **Walk-forward OOS Sharpe ≥ 1** on a rotating fold structure (train 2 days, test on the 3rd, rotate).
+2. **ADF re-verification on the full stitched window**, with hand-checked stats — this is what dropped the originally-claimed `OXYGEN_SHAKE_CHOCOLATE/GARLIC` pair (ADF p = 0.92 on full data, far from the originally-quoted 0.03).
+3. **Per-component ablation in the live algorithm**: every basket / pair / cap was added one at a time, each variant backtested against the prior one; we kept the addition only if it improved 3-day cumulative PnL by more than the run-to-run engine variance (~20 K).
+
+Beyond the automated filters, every conclusion was **hand-verified** end-to-end by reading the raw CSVs and reproducing the headline statistics from scratch.
+
+#### What we shipped
+
+[`algo_r5.py`](round_5/Algo/algo_r5.py) is one Trader class with a single `take + clean + make` template applied to all 50 products, with the per-product fair value computed as
+
+```
+fair_i = mid_i  +  basket_skew_i  +  pair_skew_i  +  inventory_skew_i
+```
+
+where:
+
+- `basket_skew_i` enforces the PEBBLES Σ = 50 000 and SNACKPACK Σ = 50 221 invariants;
+- `pair_skew_i` aggregates tilts from the 9 within-group + 30 cross-group cointegrating pairs in `ALL_PAIRS`;
+- `inventory_skew_i = -β · position` (β = 0.20 globally; 0.40 for `MICROCHIP_OVAL` and `SLEEP_POD_POLYESTER`; 0.60 for `ROBOT_DISHES`);
+- `ROBOT_DISHES` additionally receives a **dedicated log-pair tilt** combining 4 novel log-space residuals.
+
+`PROD_CAP` clamps the position below ±10 on the 10 historical bleeders.  When the basket residual exceeds `BIG_SKEW`, the algo also crosses the spread aggressively (size 2) to fade the deviation; otherwise it sits passively one tick inside the inside.
+
+3-day backtest on R5 days 2/3/4: **1,420,758 PnL · Sharpe 22.81 · max DD 25,532 · Calmar 55.6** (sanity-checked locally).
 
 ---
 

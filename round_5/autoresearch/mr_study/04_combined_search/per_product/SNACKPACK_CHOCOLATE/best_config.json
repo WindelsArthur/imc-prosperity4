@@ -1,0 +1,11 @@
+{
+  "mode": "MM",
+  "alpha_skew": 1.0,
+  "beta_inv": 0.3,
+  "max_size": 10,
+  "spread_offset": 1,
+  "fv_family": "ar_diff",
+  "fv_params": {
+    "p": 1
+  }
+}

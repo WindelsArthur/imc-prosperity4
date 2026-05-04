@@ -1,0 +1,11 @@
+{
+  "best_value_fold_median": 363619.0,
+  "best_params": {
+    "PAIR_TILT_DIVISOR": 1.6954539758647382,
+    "PAIR_TILT_CLIP": 11.580589313026014,
+    "INV_SKEW_BETA": 0.11941156188118197,
+    "QUOTE_BASE_SIZE_CAP": 6,
+    "fair_quote_gate": 0.5917180894406724
+  },
+  "n_trials": 40
+}

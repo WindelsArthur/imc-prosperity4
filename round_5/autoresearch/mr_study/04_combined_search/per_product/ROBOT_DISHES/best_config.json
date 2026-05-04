@@ -1,0 +1,14 @@
+{
+  "mode": "TAKER",
+  "fv_family": "rolling_mean",
+  "fv_params": {
+    "w": 50
+  },
+  "sigma_fallback": 50.0,
+  "z_in": 2.5,
+  "z_out": 0.5,
+  "sizing": "fixed",
+  "sizing_gamma": 0.0,
+  "z_stop": null,
+  "time_stop": null
+}

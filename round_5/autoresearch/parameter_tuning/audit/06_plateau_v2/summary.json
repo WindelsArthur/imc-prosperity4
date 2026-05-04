@@ -1,0 +1,105 @@
+{
+  "n_cross_total": 157,
+  "n_cross_stable": 80,
+  "n_cross_dropped": 77,
+  "beta_shift_threshold": 0.3,
+  "full_tuned_reference": {
+    "total_3day": 1436024,
+    "fold_min": 450479,
+    "fold_median": 465320,
+    "sharpe_3day": 13.0284
+  },
+  "sweep": [
+    {
+      "N_target": 30,
+      "N_used": 30,
+      "total_pairs": 39,
+      "day2": 342975,
+      "day3": 306858,
+      "day4": 292522,
+      "total_3day": 942355,
+      "fold_min": 292522,
+      "fold_median": 306858,
+      "fold_mean": 311214.2,
+      "sharpe_3day": 12.0823
+    },
+    {
+      "N_target": 50,
+      "N_used": 50,
+      "total_pairs": 59,
+      "day2": 424550,
+      "day3": 360806,
+      "day4": 355858,
+      "total_3day": 1141214,
+      "fold_min": 355858,
+      "fold_median": 360806,
+      "fold_mean": 372565.2,
+      "sharpe_3day": 9.9293
+    },
+    {
+      "N_target": 75,
+      "N_used": 75,
+      "total_pairs": 84,
+      "day2": 456622,
+      "day3": 404308,
+      "day4": 377782,
+      "total_3day": 1238713,
+      "fold_min": 377782,
+      "fold_median": 404308,
+      "fold_mean": 409465.6,
+      "sharpe_3day": 10.2925
+    },
+    {
+      "N_target": 100,
+      "N_used": 80,
+      "total_pairs": 89,
+      "day2": 450814,
+      "day3": 418008,
+      "day4": 381333,
+      "total_3day": 1250154,
+      "fold_min": 381333,
+      "fold_median": 418008,
+      "fold_mean": 417234.2,
+      "sharpe_3day": 11.9891
+    },
+    {
+      "N_target": 125,
+      "N_used": 80,
+      "total_pairs": 89,
+      "day2": 450814,
+      "day3": 418008,
+      "day4": 381333,
+      "total_3day": 1250154,
+      "fold_min": 381333,
+      "fold_median": 418008,
+      "fold_mean": 417234.2,
+      "sharpe_3day": 11.9891
+    },
+    {
+      "N_target": 150,
+      "N_used": 80,
+      "total_pairs": 89,
+      "day2": 450814,
+      "day3": 418008,
+      "day4": 381333,
+      "total_3day": 1250154,
+      "fold_min": 381333,
+      "fold_median": 418008,
+      "fold_mean": 417234.2,
+      "sharpe_3day": 11.9891
+    }
+  ],
+  "best_by_fold_min": {
+    "N_target": 100.0,
+    "N_used": 80.0,
+    "total_pairs": 89.0,
+    "day2": 450814.0,
+    "day3": 418008.0,
+    "day4": 381333.0,
+    "total_3day": 1250154.0,
+    "fold_min": 381333.0,
+    "fold_median": 418008.0,
+    "fold_mean": 417234.2,
+    "sharpe_3day": 11.9891
+  }
+}

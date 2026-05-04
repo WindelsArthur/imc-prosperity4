@@ -1,0 +1,10 @@
+{
+  "decision": "tier2_pebbles_uplift",
+  "params": {
+    "PEBBLES_SKEW_DIVISOR": 8.0,
+    "PEBBLES_SKEW_CLIP": 5.0,
+    "PEBBLES_BIG_SKEW": 3.5
+  },
+  "delta_fold_mean": 7320.0,
+  "delta_fold_median": 10038.0
+}

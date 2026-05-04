@@ -1,0 +1,11 @@
+product,chosen_beta,retained,best_passed_gate,best_target_fold_min_delta,best_total_fold_min_delta,best_target_3day_delta
+ROBOT_DISHES,0.05,True,True,0,0,0
+OXYGEN_SHAKE_CHOCOLATE,0.1,True,True,0,0,94
+MICROCHIP_OVAL,0.4,True,True,1233,1232,1893
+MICROCHIP_SQUARE,0.05,True,True,0,0,0
+UV_VISOR_AMBER,0.05,True,True,0,0,170
+SLEEP_POD_POLYESTER,0.05,True,True,1652,1652,2229
+MICROCHIP_TRIANGLE,0.2,False,True,0,0,0
+OXYGEN_SHAKE_EVENING_BREATH,0.05,True,True,0,0,0
+PANEL_1X4,0.05,True,True,0,0,0
+GALAXY_SOUNDS_BLACK_HOLES,0.6,True,True,0,0,42

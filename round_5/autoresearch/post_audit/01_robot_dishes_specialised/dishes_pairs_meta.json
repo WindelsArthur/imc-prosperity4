@@ -1,0 +1,72 @@
+{
+  "existing_global_pairs_touching_dishes": [
+    [
+      "PEBBLES_XL",
+      "ROBOT_DISHES",
+      2.564397695004785,
+      -12461.145043672
+    ],
+    [
+      "PEBBLES_XL",
+      "ROBOT_DISHES",
+      2.580310373321849,
+      -12603.173905101849
+    ],
+    [
+      "PEBBLES_XL",
+      "ROBOT_DISHES",
+      2.56069672636587,
+      -12428.06846030326
+    ],
+    [
+      "PEBBLES_XL",
+      "ROBOT_DISHES",
+      2.5614599343393354,
+      -12434.873479647302
+    ]
+  ],
+  "log_pairs_for_dedicated_handler": [
+    [
+      "PEBBLES_S",
+      "ROBOT_DISHES",
+      -1.424539615179072,
+      22.21380995919832
+    ],
+    [
+      "ROBOT_DISHES",
+      "PANEL_2X4",
+      0.7852940330682344,
+      1.885458055632914
+    ],
+    [
+      "GALAXY_SOUNDS_BLACK_HOLES",
+      "ROBOT_DISHES",
+      1.234892829761178,
+      -2.0303511860381143
+    ],
+    [
+      "ROBOT_DISHES",
+      "SNACKPACK_STRAWBERRY",
+      1.2191408531743275,
+      -2.100596770515793
+    ]
+  ],
+  "log_pairs_isolated_pnl_5fold": {
+    "PEBBLES_S|ROBOT_DISHES": 18991.5,
+    "ROBOT_DISHES|PANEL_2X4": 17304.0,
+    "GALAXY_SOUNDS_BLACK_HOLES|ROBOT_DISHES": 13529.5,
+    "ROBOT_DISHES|SNACKPACK_STRAWBERRY": 12158.0
+  },
+  "baseline_dishes_per_day": {
+    "2": 16701,
+    "3": 3121,
+    "4": 6379
+  },
+  "baseline_dishes_per_fold": {
+    "F1": 3121,
+    "F2": 6379,
+    "F3": 3121,
+    "F4": 16701,
+    "F5": 3121
+  }
+}

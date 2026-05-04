@@ -1,0 +1,14 @@
+{
+  "mode": "TAKER",
+  "fv_family": "range_mid",
+  "fv_params": {
+    "w": 500
+  },
+  "sigma_fallback": 50.0,
+  "z_in": 1.75,
+  "z_out": 0.1,
+  "sizing": "fixed",
+  "sizing_gamma": 0.0,
+  "z_stop": null,
+  "time_stop": null
+}

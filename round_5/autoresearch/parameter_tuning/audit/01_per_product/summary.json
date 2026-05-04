@@ -1,0 +1,165 @@
+{
+  "baseline_total_3day": 1083016,
+  "baseline_per_day": {
+    "2": 364990,
+    "3": 363578,
+    "4": 354448
+  },
+  "baseline_sharpe": 63.081,
+  "baseline_max_dd": 24692,
+  "baseline_fold_min": 354448,
+  "baseline_fold_median": 363578,
+  "tuned_total_3day": 1436024,
+  "tuned_per_day": {
+    "2": 520225,
+    "3": 465320,
+    "4": 450479
+  },
+  "tuned_sharpe": 13.0284,
+  "tuned_max_dd": 27243,
+  "tuned_fold_min": 450479,
+  "tuned_fold_median": 465320,
+  "delta_total_3day": 353008,
+  "delta_fold_min": 96031,
+  "delta_fold_median": 101742,
+  "n_products": 50,
+  "n_winners_with_uplift": 24,
+  "n_losers_with_drag": 9,
+  "n_fragility_flagged": 5,
+  "winners_top5": [
+    {
+      "product": "PEBBLES_XS",
+      "baseline_3day": 8527,
+      "tuned_3day": 68331,
+      "delta_3day": 59804,
+      "baseline_fold_min": -7425,
+      "tuned_fold_min": 20168,
+      "fold_min_delta": 27593,
+      "added_n_pairs": 11
+    },
+    {
+      "product": "SNACKPACK_CHOCOLATE",
+      "baseline_3day": -8223,
+      "tuned_3day": 31346,
+      "delta_3day": 39569,
+      "baseline_fold_min": -4591,
+      "tuned_fold_min": 9150,
+      "fold_min_delta": 13741,
+      "added_n_pairs": 3
+    },
+    {
+      "product": "SNACKPACK_RASPBERRY",
+      "baseline_3day": -15948,
+      "tuned_3day": 20673,
+      "delta_3day": 36621,
+      "baseline_fold_min": -10282,
+      "tuned_fold_min": 1868,
+      "fold_min_delta": 12150,
+      "added_n_pairs": 0
+    },
+    {
+      "product": "MICROCHIP_CIRCLE",
+      "baseline_3day": 10381,
+      "tuned_3day": 40045,
+      "delta_3day": 29664,
+      "baseline_fold_min": -1208,
+      "tuned_fold_min": 9165,
+      "fold_min_delta": 10373,
+      "added_n_pairs": 8
+    },
+    {
+      "product": "SNACKPACK_VANILLA",
+      "baseline_3day": 3873,
+      "tuned_3day": 29969,
+      "delta_3day": 26096,
+      "baseline_fold_min": -3475,
+      "tuned_fold_min": 8069,
+      "fold_min_delta": 11544,
+      "added_n_pairs": 6
+    }
+  ],
+  "losers_top5": [
+    {
+      "product": "OXYGEN_SHAKE_CHOCOLATE",
+      "baseline_3day": 23573,
+      "tuned_3day": -539,
+      "delta_3day": -24112,
+      "baseline_fold_min": 4864,
+      "tuned_fold_min": -13891,
+      "fold_min_delta": -18755,
+      "added_n_pairs": 5
+    },
+    {
+      "product": "UV_VISOR_AMBER",
+      "baseline_3day": 24028,
+      "tuned_3day": 19966,
+      "delta_3day": -4062,
+      "baseline_fold_min": 752,
+      "tuned_fold_min": -4156,
+      "fold_min_delta": -4908,
+      "added_n_pairs": 17
+    },
+    {
+      "product": "MICROCHIP_OVAL",
+      "baseline_3day": 11011,
+      "tuned_3day": 7227,
+      "delta_3day": -3784,
+      "baseline_fold_min": 970,
+      "tuned_fold_min": 81,
+      "fold_min_delta": -889,
+      "added_n_pairs": 2
+    },
+    {
+      "product": "OXYGEN_SHAKE_GARLIC",
+      "baseline_3day": 60605,
+      "tuned_3day": 57658,
+      "delta_3day": -2947,
+      "baseline_fold_min": 17994,
+      "tuned_fold_min": 13645,
+      "fold_min_delta": -4349,
+      "added_n_pairs": 12
+    },
+    {
+      "product": "SLEEP_POD_POLYESTER",
+      "baseline_3day": 39798,
+      "tuned_3day": 37550,
+      "delta_3day": -2248,
+      "baseline_fold_min": 5429,
+      "tuned_fold_min": 5172,
+      "fold_min_delta": -257,
+      "added_n_pairs": 13
+    }
+  ],
+  "fragility_flagged": [
+    {
+      "product": "PANEL_1X2",
+      "delta_median": 1126,
+      "fold_min_delta": -3731,
+      "added_n_pairs": 7
+    },
+    {
+      "product": "PANEL_1X4",
+      "delta_median": 4913,
+      "fold_min_delta": -2412,
+      "added_n_pairs": 4
+    },
+    {
+      "product": "UV_VISOR_YELLOW",
+      "delta_median": 1016,
+      "fold_min_delta": -1654,
+      "added_n_pairs": 4
+    },
+    {
+      "product": "ROBOT_IRONING",
+      "delta_median": 118,
+      "fold_min_delta": -202,
+      "added_n_pairs": 13
+    },
+    {
+      "product": "TRANSLATOR_ASTRO_BLACK",
+      "delta_median": 2348,
+      "fold_min_delta": -146,
+      "added_n_pairs": 1
+    }
+  ]
+}

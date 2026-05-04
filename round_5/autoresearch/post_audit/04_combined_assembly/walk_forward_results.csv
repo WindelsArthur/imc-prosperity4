@@ -1,0 +1,21 @@
+variant,fold,train_days,test_day,test_pnl,delta_vs_baseline,note
+v00_baseline,F1,2,3,456258,0,baseline
+v00_baseline,F2,"2,3",4,446200,0,baseline
+v00_baseline,F3,4,3,456258,0,baseline
+v00_baseline,F4,"3,4",2,489823,0,baseline
+v00_baseline,F5,"2,4",3,456258,0,baseline
+v01_phase1,F1,2,3,461788,5530,Phase 1 winner (ROBOT_DISHES dedicated handler)
+v01_phase1,F2,"2,3",4,456700,10500,
+v01_phase1,F3,4,3,461788,5530,
+v01_phase1,F4,"3,4",2,494594,4771,
+v01_phase1,F5,"2,4",3,461788,5530,
+v03_phase3,F1,2,3,458612,2354,"Phase 3 alone: MICROCHIP_OVAL=0.40 + SLEEP_POD_POLYESTER=0.40"
+v03_phase3,F2,"2,3",4,448725,2525,
+v03_phase3,F3,4,3,458612,2354,
+v03_phase3,F4,"3,4",2,492618,2795,
+v03_phase3,F5,"2,4",3,458612,2354,
+v04_combined,F1,2,3,464142,7884,"Phase 1 + Phase 3 (ship target)"
+v04_combined,F2,"2,3",4,459226,13026,
+v04_combined,F3,4,3,464142,7884,
+v04_combined,F4,"3,4",2,497389,7566,
+v04_combined,F5,"2,4",3,464142,7884,
